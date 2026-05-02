@@ -66,7 +66,7 @@ export function HowItWorksSection() {
 
   return (
     <section
-      id="analysis"
+      id="infrastructure"
       ref={sectionRef}
       className="relative py-24 lg:py-32 bg-foreground text-background overflow-hidden"
     >

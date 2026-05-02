@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "Background", href: "#background" },
-  { name: "Analysis", href: "#analysis" },
-  { name: "Model", href: "#model" },
-  { name: "About the Data", href: "#about-the-data" },
+  { name: "Process", href: "#process" },
+  { name: "Infrastructure", href: "#infrastructure" },
+  { name: "Live Metrics", href: "#live-metrics" },
+  { name: "Integrations", href: "#integrations" },
 ];
 
 export function Navigation() {
@@ -63,18 +63,7 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <a href="#" className={`text-foreground/70 hover:text-foreground transition-all duration-500 ${isScrolled ? "text-xs" : "text-sm"}`}>
-              Sign in
-            </a>
-            <Button
-              size="sm"
-              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
-            >
-              Start creating
-            </Button>
-          </div>
+
 
           {/* Mobile Menu Button */}
           <button
@@ -121,28 +110,7 @@ export function Navigation() {
             ))}
           </div>
           
-          {/* Bottom CTAs */}
-          <div className={`flex gap-4 pt-8 border-t border-foreground/10 transition-all duration-500 ${
-            isMobileMenuOpen 
-              ? "opacity-100 translate-y-0" 
-              : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
-          >
-            <Button 
-              variant="outline" 
-              className="flex-1 rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Sign in
-            </Button>
-            <Button 
-              className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Start creating
-            </Button>
-          </div>
+
         </div>
       </div>
     </header>
