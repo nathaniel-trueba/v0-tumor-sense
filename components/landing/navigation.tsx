@@ -9,7 +9,7 @@ const navLinks = [
   { name: "Background", href: "#process" },
   { name: "Analysis", href: "#infrastructure" },
   { name: "Model", href: "#live-metrics" },
-  { name: "About the Data", href: "#integrations" },
+  { name: "Results", href: "#integrations" },
 ];
 
 export function Navigation() {
