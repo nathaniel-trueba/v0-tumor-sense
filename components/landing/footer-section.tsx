@@ -4,26 +4,26 @@ import { ArrowUpRight } from "lucide-react";
 import { AnimatedWave } from "./animated-wave";
 
 const footerLinks = {
-  Directory: [
+  Navigation: [
     { name: "About", href: "#process" },
     { name: "Background", href: "#infrastructure" },
     { name: "Analysis", href: "#capabilities" },
     { name: "Results", href: "#live-metrics" },
   ],
   LinkedIn: [
-    { name: "Documentation", href: "#developers" },
-    { name: "API Reference", href: "#" },
-    { name: "SDK", href: "#developers" },
-    { name: "Status", href: "#" },
+    { name: "Nathaniel Trueba", href: "#developers" },
+    { name: "Kavya Shah", href: "#" },
+    { name: "Steven Ngo", href: "#developers" },
+    { name: "Evan Park", href: "#" },
   ],
   DS3: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Careers", href: "#", badge: "Hiring" },
+    { name: "Website", href: "#" },
+    { name: "Spring Projects", href: "#" },
+    { name: "Instagram", href: "#" },
     { name: "Contact", href: "#" },
   ],
-  UCSD: [
-    { name: "Privacy", href: "#" },
+  HDSI: [
+    { name: "Website", href: "#" },
     { name: "Terms", href: "#" },
     { name: "Security", href: "#security" },
   ],
