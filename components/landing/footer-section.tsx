@@ -4,13 +4,13 @@ import { ArrowUpRight } from "lucide-react";
 import { AnimatedWave } from "./animated-wave";
 
 const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "How it works", href: "#how-it-works" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Integrations", href: "#integrations" },
+  Directory: [
+    { name: "About", href: "#process" },
+    { name: "Background", href: "#infrastructure" },
+    { name: "Analysis", href: "#capabilities" },
+    { name: "Results", href: "#live-metrics" },
   ],
-  Contact: [
+  LinkedIn: [
     { name: "Documentation", href: "#developers" },
     { name: "API Reference", href: "#" },
     { name: "SDK", href: "#developers" },
@@ -42,7 +42,7 @@ export function FooterSection() {
       <div className="absolute inset-0 h-64 opacity-20 pointer-events-none overflow-hidden">
         <AnimatedWave />
       </div>
-      
+
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Main Footer */}
         <div className="py-16 lg:py-24">
