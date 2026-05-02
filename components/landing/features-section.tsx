@@ -314,7 +314,7 @@ export function FeaturesSection() {
 
   return (
     <section
-      id="features"
+      id="background"
       ref={sectionRef}
       className="relative py-24 lg:py-32"
     >
