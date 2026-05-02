@@ -108,8 +108,8 @@ export function HeroSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Your toolkit to stop configuring and start innovating. 
-            Securely build, deploy, and scale the best experiences.
+            A predictive model that gives you confidence when you need it. 
+            Identify risks before they become emergencies.
           </p>
           
           {/* CTAs */}
