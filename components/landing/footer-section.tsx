@@ -10,19 +10,19 @@ const footerLinks = {
     { name: "Pricing", href: "#pricing" },
     { name: "Integrations", href: "#integrations" },
   ],
-  Developers: [
+  Contact: [
     { name: "Documentation", href: "#developers" },
     { name: "API Reference", href: "#" },
     { name: "SDK", href: "#developers" },
     { name: "Status", href: "#" },
   ],
-  Company: [
+  DS3: [
     { name: "About", href: "#" },
     { name: "Blog", href: "#" },
     { name: "Careers", href: "#", badge: "Hiring" },
     { name: "Contact", href: "#" },
   ],
-  Legal: [
+  UCSD: [
     { name: "Privacy", href: "#" },
     { name: "Terms", href: "#" },
     { name: "Security", href: "#security" },
