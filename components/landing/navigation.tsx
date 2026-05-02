@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "About", href: "#capabilities" },
-  { name: "Background", href: "#process" },
-  { name: "Analysis", href: "#infrastructure" },
+  { name: "About", href: "#process" },
+  { name: "Background", href: "#infrastructure" },
+  { name: "Analysis", href: "#capabilities" },
   { name: "Model", href: "#live-metrics" },
   { name: "Results", href: "#integrations" },
 ];
