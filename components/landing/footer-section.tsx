@@ -17,10 +17,9 @@ const footerLinks = {
     { name: "Evan Park", href: "#" },
   ],
   DS3: [
-    { name: "Website", href: "#" },
-    { name: "Spring Projects", href: "#" },
-    { name: "Instagram", href: "#" },
-    { name: "Contact", href: "#" },
+    { name: "Website", href: "https://www.ds3atucsd.com" },
+    { name: "Spring Projects", href: "https://www.ds3atucsd.com/projects" },
+    { name: "Instagram", href: "https://www.instagram.com/ds3atucsd/" },
   ],
   HDSI: [
     { name: "Website", href: "#" },
