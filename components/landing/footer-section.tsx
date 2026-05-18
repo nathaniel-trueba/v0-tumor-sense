@@ -22,9 +22,7 @@ const footerLinks = {
     { name: "Instagram", href: "https://www.instagram.com/ds3atucsd/" },
   ],
   HDSI: [
-    { name: "Website", href: "#" },
-    { name: "Terms", href: "#" },
-    { name: "Security", href: "#security" },
+    { name: "Website", href: "https://datascience.ucsd.edu" },
   ],
 };
 
