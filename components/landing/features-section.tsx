@@ -185,37 +185,64 @@ function CollabVisual() {
 }
 
 function CalendarVisual() {
-  const days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-  const highlightDay = 15;
+  const days = Array.from({ length: 28 }, (_, i) => i + 1);
+  const highlightDay = 3;
+  const pulseDay = 20;
+  const dayHeaders = ["M", "T", "W", "T", "F", "S", "S"];
+  const colSpacing = 23;
+  const startCx = 31;
+  const startCy = 72;
+  const rowSpacing = 18;
+
   return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
+    <svg viewBox="0 0 200 170" className="w-full h-full">
       {/* Calendar body */}
-      <rect x="25" y="25" width="150" height="120" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
+      <rect x="15" y="18" width="170" height="145" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
 
       {/* Header bar */}
-      <rect x="25" y="25" width="150" height="28" rx="4" fill="currentColor" opacity="0.08" />
+      <rect x="15" y="18" width="170" height="26" rx="4" fill="currentColor" opacity="0.08" />
 
       {/* Binding pegs */}
-      <rect x="65" y="18" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
-      <rect x="129" y="18" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
+      <rect x="60" y="10" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
+      <rect x="134" y="10" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
 
-      {/* Month label */}
-      <text x="100" y="44" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="currentColor" opacity="0.6">NEXT STEPS</text>
+      {/* Day headers */}
+      {dayHeaders.map((h, i) => (
+        <text
+          key={h + i}
+          x={startCx + i * colSpacing}
+          y={54}
+          textAnchor="middle"
+          fontSize="8"
+          fontFamily="monospace"
+          fill="currentColor"
+          opacity="0.5"
+        >
+          {h}
+        </text>
+      ))}
 
-      {/* Day grid — 3 rows of 7 */}
+      {/* Day grid — 4 rows of 7 */}
       {days.map((d, i) => {
         const col = i % 7;
         const row = Math.floor(i / 7);
-        const cx = 42 + col * 19;
-        const cy = 70 + row * 22;
+        const cx = startCx + col * colSpacing;
+        const cy = startCy + row * rowSpacing;
         const isHighlight = d === highlightDay;
+        const isPulse = d === pulseDay;
         return (
           <g key={d}>
-            <circle cx={cx} cy={cy} r="7" fill={isHighlight ? "currentColor" : "none"} opacity={isHighlight ? 1 : 0}>
-              {isHighlight && (
-                <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
-              )}
-            </circle>
+            {/* Solid fill for highlight day */}
+            {isHighlight && (
+              <circle cx={cx} cy={cy} r="8" fill="currentColor" opacity="1" />
+            )}
+            {/* Pulsing ring for pulse day */}
+            {isPulse && (
+              <circle cx={cx} cy={cy} r="8" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+              </circle>
+            )}
             <text
               x={cx}
               y={cy + 3.5}
@@ -223,23 +250,13 @@ function CalendarVisual() {
               fontSize="7"
               fontFamily="monospace"
               fill={isHighlight ? "white" : "currentColor"}
-              opacity={isHighlight ? 1 : 0.3}
+              opacity={isHighlight ? 1 : 0.35}
             >
               {d}
             </text>
           </g>
         );
       })}
-
-      {/* Pulse ring on highlighted day */}
-      <circle cx="42" cy="70" r="7" fill="none" stroke="currentColor" strokeWidth="1" opacity="0">
-        <animate attributeName="cx" values="42" />
-        <animate attributeName="cy" values="70" />
-      </circle>
-      <circle cx={42 + 2 * 19} cy={70} r="7" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0">
-        <animate attributeName="r" values="7;14;7" dur="2s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" />
-      </circle>
     </svg>
   );
 }
