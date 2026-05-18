@@ -184,46 +184,62 @@ function CollabVisual() {
   );
 }
 
-function SecurityVisual() {
+function CalendarVisual() {
+  const days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
+  const highlightDay = 15;
   return (
     <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Shield */}
-      <path
-        d="M 100 20 L 150 40 L 150 90 Q 150 130 100 145 Q 50 130 50 90 L 50 40 Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      
-      {/* Inner shield */}
-      <path
-        d="M 100 35 L 135 50 L 135 85 Q 135 115 100 128 Q 65 115 65 85 L 65 50 Z"
-        fill="currentColor"
-        opacity="0.1"
-      >
-        <animate attributeName="opacity" values="0.1;0.2;0.1" dur="2s" repeatCount="indefinite" />
-      </path>
-      
-      {/* Lock icon */}
-      <rect x="85" y="70" width="30" height="25" rx="3" fill="currentColor" />
-      <path
-        d="M 90 70 L 90 60 Q 90 50 100 50 Q 110 50 110 60 L 110 70"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-      
-      {/* Keyhole */}
-      <circle cx="100" cy="80" r="4" fill="white" />
-      <rect x="98" y="82" width="4" height="8" fill="white" />
-      
-      {/* Scan lines */}
-      <line x1="60" y1="60" x2="140" y2="60" stroke="currentColor" strokeWidth="1" opacity="0">
-        <animate attributeName="y1" values="40;120;40" dur="3s" repeatCount="indefinite" />
-        <animate attributeName="y2" values="40;120;40" dur="3s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0;0.5;0" dur="3s" repeatCount="indefinite" />
-      </line>
+      {/* Calendar body */}
+      <rect x="25" y="25" width="150" height="120" rx="4" fill="none" stroke="currentColor" strokeWidth="2" />
+
+      {/* Header bar */}
+      <rect x="25" y="25" width="150" height="28" rx="4" fill="currentColor" opacity="0.08" />
+
+      {/* Binding pegs */}
+      <rect x="65" y="18" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
+      <rect x="129" y="18" width="6" height="14" rx="3" fill="currentColor" opacity="0.5" />
+
+      {/* Month label */}
+      <text x="100" y="44" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="currentColor" opacity="0.6">NEXT STEPS</text>
+
+      {/* Day grid — 3 rows of 7 */}
+      {days.map((d, i) => {
+        const col = i % 7;
+        const row = Math.floor(i / 7);
+        const cx = 42 + col * 19;
+        const cy = 70 + row * 22;
+        const isHighlight = d === highlightDay;
+        return (
+          <g key={d}>
+            <circle cx={cx} cy={cy} r="7" fill={isHighlight ? "currentColor" : "none"} opacity={isHighlight ? 1 : 0}>
+              {isHighlight && (
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+              )}
+            </circle>
+            <text
+              x={cx}
+              y={cy + 3.5}
+              textAnchor="middle"
+              fontSize="7"
+              fontFamily="monospace"
+              fill={isHighlight ? "white" : "currentColor"}
+              opacity={isHighlight ? 1 : 0.3}
+            >
+              {d}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Pulse ring on highlighted day */}
+      <circle cx="42" cy="70" r="7" fill="none" stroke="currentColor" strokeWidth="1" opacity="0">
+        <animate attributeName="cx" values="42" />
+        <animate attributeName="cy" values="70" />
+      </circle>
+      <circle cx={42 + 2 * 19} cy={70} r="7" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0">
+        <animate attributeName="r" values="7;14;7" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite" />
+      </circle>
     </svg>
   );
 }
@@ -237,7 +253,7 @@ function AnimatedVisual({ type }: { type: string }) {
     case "collab":
       return <CollabVisual />;
     case "security":
-      return <SecurityVisual />;
+      return <CalendarVisual />;
     default:
       return <DeployVisual />;
   }
