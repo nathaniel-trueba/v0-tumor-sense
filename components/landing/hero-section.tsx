@@ -131,7 +131,7 @@ export function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="h-14 px-8 text-base rounded-full border-[#EC4899] text-[#EC4899] hover:bg-[#EC4899]/10 group"
+              className="h-14 px-8 text-base rounded-full bg-[#EC4899] border-[#EC4899] text-white hover:bg-[#EC4899]/90 group"
               onClick={() => document.getElementById('live-metrics')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Try it yourself
