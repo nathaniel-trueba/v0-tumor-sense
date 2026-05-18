@@ -5,25 +5,25 @@ import { useEffect, useRef, useState } from "react";
 const features = [
   {
     number: "01",
-    title: "Instant Deployment",
+    title: "Designed with you in mind",
     description: "Push to production in seconds. Our edge network ensures your applications load instantly, anywhere in the world.",
     visual: "deploy",
   },
   {
     number: "02",
-    title: "AI-Native Workflows",
+    title: "Trained using SVMs",
     description: "Build intelligent applications with built-in AI capabilities. From inference to training, everything scales automatically.",
     visual: "ai",
   },
   {
     number: "03",
-    title: "Real-time Collaboration",
+    title: "Predictions personalized to you",
     description: "Work together seamlessly. Live preview, instant feedback, and version control that actually makes sense.",
     visual: "collab",
   },
   {
     number: "04",
-    title: "Enterprise Security",
+    title: "Results for what's next",
     description: "Bank-grade encryption, SOC 2 compliance, and granular access controls. Your data stays yours.",
     visual: "security",
   },
