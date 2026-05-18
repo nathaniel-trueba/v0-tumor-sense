@@ -30,9 +30,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: "Instagram", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
+  { name: "GitHub", href: "https://github.com/VedVar43789/TumorSense" },
 ];
 
 export function FooterSection() {
