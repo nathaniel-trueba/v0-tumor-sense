@@ -95,7 +95,7 @@ export function HeroSection() {
                     </span>
                   ))}
                 </span>
-                <span className="absolute -bottom-2 left-0 right-0 h-3 bg-foreground/10" />
+                <span className="absolute -bottom-2 left-0 right-0 h-3" style={{ backgroundColor: "#EC4899" }} />
               </span>
             </span>
           </h1>
