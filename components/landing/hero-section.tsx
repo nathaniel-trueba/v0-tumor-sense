@@ -122,19 +122,20 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
+              variant="outline"
+              className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
               onClick={() => document.getElementById('integrations')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Model Performance
-              <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
+              className="h-14 px-8 text-base rounded-full border-[#EC4899] text-[#EC4899] hover:bg-[#EC4899]/10 group"
               onClick={() => document.getElementById('live-metrics')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Try it yourself
+              <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
         </div>
