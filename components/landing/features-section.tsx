@@ -6,25 +6,25 @@ const features = [
   {
     number: "01",
     title: "Designed with you in mind",
-    description: "Push to production in seconds. Our edge network ensures your applications load instantly, anywhere in the world.",
+    description: "Our model was trained using 569 instances from the Diagnostic Wisconsin Breast Cancer Database to support prediction for other patients.",
     visual: "deploy",
   },
   {
     number: "02",
     title: "Trained using SVMs",
-    description: "Build intelligent applications with built-in AI capabilities. From inference to training, everything scales automatically.",
+    description: "Support vector machines provide powerful class separation between benign and malignant tumors to give you leading prediction power.",
     visual: "ai",
   },
   {
     number: "03",
     title: "Predictions personalized to you",
-    description: "Work together seamlessly. Live preview, instant feedback, and version control that actually makes sense.",
+    description: "Predictions are personalized based on your specific health markers and scan results in order to apply our findings to your future.",
     visual: "collab",
   },
   {
     number: "04",
     title: "Results for what's next",
-    description: "Bank-grade encryption, SOC 2 compliance, and granular access controls. Your data stays yours.",
+    description: "Our medical suggestions help you plan for what's next and understand your situation as clearly as possible.",
     visual: "security",
   },
 ];
