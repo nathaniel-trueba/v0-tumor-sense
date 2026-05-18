@@ -45,41 +45,35 @@ function AnimatedCounter({ end, suffix = "", prefix = "" }: { end: number; suffi
 }
 
 const metrics = [
-  { 
-    value: 2847392, 
-    suffix: "", 
+  {
+    value: 569,
+    suffix: "",
     prefix: "",
-    label: "API requests today",
+    label: "Size of training data",
   },
-  { 
-    value: 99, 
-    suffix: ".99%", 
+  {
+    value: 99,
+    suffix: ".8%",
     prefix: "",
-    label: "Uptime this quarter",
+    label: "ROC-AUC score",
   },
-  { 
-    value: 23, 
-    suffix: "ms", 
+  {
+    value: 23,
+    suffix: "ms",
     prefix: "",
-    label: "Average response time",
+    label: "Prediction time",
   },
-  { 
-    value: 184, 
-    suffix: "", 
+  {
+    value: 97,
+    suffix: "%",
     prefix: "",
-    label: "Countries served",
+    label: "F-1 Score",
   },
 ];
 
 export function MetricsSection() {
-  const [time, setTime] = useState(new Date());
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -112,14 +106,6 @@ export function MetricsSection() {
               <br />
               can measure.
             </h2>
-          </div>
-          <div className="flex items-center gap-4 font-mono text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              Live
-            </span>
-            <span className="text-foreground/30">|</span>
-            <span>{time.toLocaleTimeString()}</span>
           </div>
         </div>
         
