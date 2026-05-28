@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSphere } from "./animated-sphere";
@@ -10,6 +11,7 @@ const words = ["health", "future", "health", "future"];
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     window.history.scrollRestoration = "manual";
@@ -124,7 +126,7 @@ export function HeroSection() {
               size="lg"
               variant="outline"
               className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
-              onClick={() => document.getElementById('integrations')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Model Performance
             </Button>
@@ -132,7 +134,7 @@ export function HeroSection() {
               size="lg"
               variant="outline"
               className="h-14 px-8 text-base rounded-full bg-[#EC4899] border-[#EC4899] text-white hover:bg-[#EC4899]/90 group"
-              onClick={() => document.getElementById('live-metrics')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => router.push('/model')}
             >
               Try it yourself
               <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />

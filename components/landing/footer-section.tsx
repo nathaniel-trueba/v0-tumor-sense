@@ -5,10 +5,11 @@ import { AnimatedWave } from "./animated-wave";
 
 const footerLinks = {
   Navigation: [
-    { name: "About", href: "#process" },
-    { name: "Background", href: "#infrastructure" },
-    { name: "Analysis", href: "#capabilities" },
-    { name: "Results", href: "#live-metrics" },
+    { name: "About", href: "/#about" },
+    { name: "Background", href: "/research#background" },
+    { name: "Analysis", href: "/research#analysis" },
+    { name: "Model", href: "/model" },
+    { name: "Results", href: "/#results" },
   ],
   LinkedIn: [
     { name: "Nathaniel Trueba", href: "#developers" },

@@ -347,7 +347,7 @@ export function FeaturesSection() {
 
   return (
     <section
-      id="process"
+      id="about"
       ref={sectionRef}
       className="relative py-24 lg:py-32"
     >
