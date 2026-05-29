@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { ChevronDown, ArrowUpRight, ImageIcon } from "lucide-react";
 import { FEATURES, type FeatureId } from "@/lib/breast-cancer/features";
 import { getDefaultInput } from "@/lib/breast-cancer/dataset";
 import { MODELS, MODEL_INDEX, type KernelId } from "@/lib/breast-cancer/models";
@@ -70,10 +71,20 @@ export function ModelWorkshop() {
     <div className="space-y-12 lg:space-y-16">
       {/* Header */}
       <div className="space-y-6">
-        <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
-          <span className="w-8 h-px bg-foreground/30" />
-          Model workshop
-        </span>
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
+            <span className="w-8 h-px bg-foreground/30" />
+            Model workshop · SVM
+          </span>
+          <Link
+            href="/model-2"
+            className="group inline-flex items-center gap-2 rounded-full border border-foreground/15 hover:border-foreground/40 bg-background/40 px-4 py-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ImageIcon className="w-3.5 h-3.5" />
+            <span className="uppercase tracking-wider">Try the image workshop</span>
+            <ArrowUpRight className="w-3.5 h-3.5 -translate-x-0.5 group-hover:translate-x-0 transition-transform" />
+          </Link>
+        </div>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <h1 className="text-4xl lg:text-6xl font-display tracking-tight max-w-3xl">
             Probe the model. <br />

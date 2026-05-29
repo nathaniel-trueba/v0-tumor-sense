@@ -31,9 +31,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // suppressHydrationWarning on <html> / <body> tolerates browser extensions
+  // (e.g. the Cursor IDE's MCP) that inject data-* attributes into the
+  // SSR-rendered HTML before React hydrates.
   return (
-    <html lang="en">
-      <body className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        suppressHydrationWarning
+      >
         {children}
         <Analytics />
       </body>

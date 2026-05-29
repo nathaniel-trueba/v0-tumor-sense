@@ -16,6 +16,7 @@ const navLinks: NavLink[] = [
   { name: "Background", href: "/research#background" },
   { name: "Analysis", href: "/research#analysis" },
   { name: "Model", href: "/model" },
+  { name: "Images", href: "/model-2" },
   { name: "Results", href: "/#results" },
 ];
 
