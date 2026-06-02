@@ -218,7 +218,7 @@ export function ModelWorkshop() {
         <div className="flex items-baseline justify-between mb-6">
           <h3 className="font-display text-2xl">Input snapshot</h3>
           <span className="text-xs font-mono text-muted-foreground">
-            JSON · ready to send to /api/predict (when wired up)
+            JSON · ready to send to /api/predict
           </span>
         </div>
         <pre className="text-xs font-mono overflow-x-auto leading-relaxed text-foreground/80">

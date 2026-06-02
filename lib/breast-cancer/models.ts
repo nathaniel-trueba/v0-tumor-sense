@@ -10,6 +10,17 @@ export interface SVMPrediction {
   confidence: number; // 0..1 confidence in the predicted label
 }
 
+// Held-out confusion matrix using the sklearn convention with
+// `target_names=['malignant', 'benign']` — row = actual, col = predicted.
+// values are real test-split counts from backend/outputs/svm_out/metrics.json.
+export interface ConfusionMatrix {
+  // rows = actual, cols = predicted, ordered [malignant, benign]
+  // matrix[0][0] = true malignant, matrix[0][1] = false benign
+  // matrix[1][0] = false malignant, matrix[1][1] = true benign
+  matrix: [[number, number], [number, number]];
+  support: number; // total test samples
+}
+
 export interface SVMModel {
   id: KernelId;
   name: string;
@@ -31,6 +42,7 @@ export interface SVMModel {
   // bias-variance proxy for the research page (training error vs cv error per complexity step)
   biasVariance: { complexity: number; train: number; test: number }[];
   learningCurve: { epoch: number; train: number; test: number }[];
+  confusionMatrix: ConfusionMatrix;
 }
 
 // ─── Weights derived from a mock-fit ───────────────────────────────────────────
@@ -159,6 +171,11 @@ function learningCurve(finalTrain: number, finalTest: number) {
   });
 }
 
+// All accuracy / AUC / precision / recall / F1 / confusion-matrix values below
+// come straight from backend/outputs/svm_out/metrics.json. Precision, recall,
+// and F1 are reported for the *malignant* class (the medically relevant
+// positive). Latency, training time and support-vector counts are illustrative
+// — they aren't in the metrics file and depend on hardware.
 export const MODELS: SVMModel[] = [
   {
     id: "linear",
@@ -167,23 +184,29 @@ export const MODELS: SVMModel[] = [
     formula: "K(xᵢ, xⱼ) = xᵢᵀxⱼ",
     description:
       "Maximum-margin linear separator. Cheapest to evaluate and easiest to interpret. Each feature contributes additively to the decision score.",
-    accuracy: 0.9543,
-    rocAuc: 0.992,
-    f1: 0.951,
-    precision: 0.949,
-    recall: 0.954,
+    accuracy: 0.9825,
+    rocAuc: 0.9937,
+    f1: 0.9762,
+    precision: 0.9762,
+    recall: 0.9762,
     latencyMs: 0.6,
     trainingTimeMs: 14,
     supportVectors: 51,
     hyperparameters: [
-      { name: "C", value: "1.0" },
+      { name: "C", value: "0.1" },
       { name: "kernel", value: "linear" },
-      { name: "class_weight", value: "balanced" },
     ],
     decision: linearDecision,
     predict: (v) => packPrediction(linearDecision(v)),
-    biasVariance: bvCurve(0.085, 0.055),
-    learningCurve: learningCurve(0.962, 0.954),
+    biasVariance: bvCurve(0.045, 0.025),
+    learningCurve: learningCurve(0.99, 0.9825),
+    confusionMatrix: {
+      matrix: [
+        [41, 1],
+        [1, 71],
+      ],
+      support: 114,
+    },
   },
   {
     id: "rbf",
@@ -191,49 +214,64 @@ export const MODELS: SVMModel[] = [
     name: "SVM — RBF kernel",
     formula: "K(xᵢ, xⱼ) = exp(−γ ||xᵢ − xⱼ||²)",
     description:
-      "Radial-basis kernel — best overall accuracy on the test split. Produces smooth, non-linear class regions, well-suited for the curved benign / malignant boundary.",
-    accuracy: 0.9789,
-    rocAuc: 0.997,
-    f1: 0.974,
-    precision: 0.978,
-    recall: 0.971,
+      "Radial-basis kernel — top-tier accuracy on the test split. Produces smooth, non-linear class regions, well-suited for the curved benign / malignant boundary.",
+    accuracy: 0.9825,
+    rocAuc: 0.9977,
+    f1: 0.9762,
+    precision: 0.9762,
+    recall: 0.9762,
     latencyMs: 1.2,
     trainingTimeMs: 23,
     supportVectors: 78,
     hyperparameters: [
       { name: "C", value: "10" },
-      { name: "γ (gamma)", value: "0.06" },
+      { name: "γ (gamma)", value: "0.01" },
       { name: "kernel", value: "rbf" },
     ],
     decision: rbfDecision,
     predict: (v) => packPrediction(rbfDecision(v)),
-    biasVariance: bvCurve(0.07, 0.045),
-    learningCurve: learningCurve(0.985, 0.978),
+    biasVariance: bvCurve(0.04, 0.022),
+    learningCurve: learningCurve(0.99, 0.9825),
+    confusionMatrix: {
+      matrix: [
+        [41, 1],
+        [1, 71],
+      ],
+      support: 114,
+    },
   },
   {
     id: "polynomial",
     kernel: "polynomial",
-    name: "SVM — Polynomial (deg 3) kernel",
+    name: "SVM — Polynomial (deg 2) kernel",
     formula: "K(xᵢ, xⱼ) = (γ·xᵢᵀxⱼ + r)^d",
     description:
-      "Higher-order polynomial boundary captures interaction effects between features (e.g. radius × concavity), but trends toward higher variance.",
-    accuracy: 0.9627,
-    rocAuc: 0.991,
-    f1: 0.959,
-    precision: 0.961,
-    recall: 0.957,
+      "Degree-2 polynomial boundary captures pairwise interactions between features (e.g. radius × concavity) and reaches the highest test ROC-AUC of the four kernels.",
+    accuracy: 0.9825,
+    rocAuc: 0.998,
+    f1: 0.9762,
+    precision: 0.9762,
+    recall: 0.9762,
     latencyMs: 1.6,
     trainingTimeMs: 28,
     supportVectors: 92,
     hyperparameters: [
-      { name: "C", value: "1.0" },
-      { name: "degree", value: "3" },
-      { name: "coef0", value: "1" },
+      { name: "C", value: "1" },
+      { name: "degree", value: "2" },
+      { name: "coef0", value: "1.0" },
+      { name: "γ (gamma)", value: "scale" },
     ],
     decision: polynomialDecision,
     predict: (v) => packPrediction(polynomialDecision(v)),
-    biasVariance: bvCurve(0.06, 0.085),
-    learningCurve: learningCurve(0.975, 0.962),
+    biasVariance: bvCurve(0.045, 0.028),
+    learningCurve: learningCurve(0.995, 0.9825),
+    confusionMatrix: {
+      matrix: [
+        [41, 1],
+        [1, 71],
+      ],
+      support: 114,
+    },
   },
   {
     id: "sigmoid",
@@ -241,24 +279,31 @@ export const MODELS: SVMModel[] = [
     name: "SVM — Sigmoid kernel",
     formula: "K(xᵢ, xⱼ) = tanh(γ·xᵢᵀxⱼ + r)",
     description:
-      "Behaves like a single hidden-layer perceptron. Performs reasonably for this dataset but is more sensitive to scaling than the others.",
-    accuracy: 0.9296,
-    rocAuc: 0.974,
-    f1: 0.921,
-    precision: 0.924,
-    recall: 0.919,
+      "Behaves like a single hidden-layer perceptron. Trails the other three kernels on this dataset — three malignant cases slip through as false benigns.",
+    accuracy: 0.9649,
+    rocAuc: 0.996,
+    f1: 0.9512,
+    precision: 0.975,
+    recall: 0.9286,
     latencyMs: 0.9,
     trainingTimeMs: 18,
     supportVectors: 109,
     hyperparameters: [
-      { name: "C", value: "1.0" },
-      { name: "γ", value: "0.07" },
-      { name: "coef0", value: "0" },
+      { name: "C", value: "10" },
+      { name: "γ (gamma)", value: "0.001" },
+      { name: "coef0", value: "0.0" },
     ],
     decision: sigmoidDecision,
     predict: (v) => packPrediction(sigmoidDecision(v)),
-    biasVariance: bvCurve(0.11, 0.07),
-    learningCurve: learningCurve(0.942, 0.93),
+    biasVariance: bvCurve(0.08, 0.04),
+    learningCurve: learningCurve(0.975, 0.9649),
+    confusionMatrix: {
+      matrix: [
+        [39, 3],
+        [1, 71],
+      ],
+      support: 114,
+    },
   },
 ];
 

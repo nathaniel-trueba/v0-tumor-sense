@@ -10,6 +10,7 @@ const footerLinks = {
     { name: "Analysis", href: "/research#analysis" },
     { name: "Model", href: "/model" },
     { name: "Images", href: "/model-2" },
+    { name: "API", href: "/api-docs" },
     { name: "Results", href: "/#results" },
   ],
   LinkedIn: [

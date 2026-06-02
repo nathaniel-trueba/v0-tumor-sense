@@ -115,8 +115,9 @@ export function ModelStats({ model, prediction }: ModelStatsProps) {
         </div>
       </div>
 
-      {/* Learning curve + bias-variance side by side */}
-      <div className="grid lg:grid-cols-2 gap-px bg-foreground/10 border border-foreground/10">
+      {/* Confusion matrix + learning curve + bias-variance side by side */}
+      <div className="grid lg:grid-cols-3 gap-px bg-foreground/10 border border-foreground/10">
+        <ConfusionMatrixCard model={model} />
         <div className="bg-background p-6">
           <div className="flex items-baseline justify-between mb-5">
             <h4 className="font-display text-xl">Learning curve</h4>
@@ -272,6 +273,111 @@ export function ModelStats({ model, prediction }: ModelStatsProps) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Confusion matrix card ───────────────────────────────────────────────────
+
+function ConfusionMatrixCard({ model }: { model: SVMModel }) {
+  const cm = model.confusionMatrix;
+  const [[tm, fb], [fm, tb]] = cm.matrix;
+  const total = tm + fb + fm + tb;
+  const correct = tm + tb;
+  const accuracy = correct / total;
+  const max = Math.max(tm, fb, fm, tb);
+
+  const cells = [
+    { value: tm, kind: "tp" as const, row: "malignant", col: "malignant", label: "True malignant" },
+    { value: fb, kind: "fn" as const, row: "malignant", col: "benign", label: "False benign" },
+    { value: fm, kind: "fp" as const, row: "benign", col: "malignant", label: "False malignant" },
+    { value: tb, kind: "tn" as const, row: "benign", col: "benign", label: "True benign" },
+  ];
+
+  return (
+    <div className="bg-background p-6">
+      <div className="flex items-baseline justify-between mb-5">
+        <h4 className="font-display text-xl">Confusion matrix</h4>
+        <span className="text-xs font-mono text-muted-foreground">
+          n = {total} · {(accuracy * 100).toFixed(1)}% acc
+        </span>
+      </div>
+      <div
+        className="grid grid-cols-[auto_repeat(2,minmax(0,1fr))] gap-px bg-foreground/10"
+        style={{ gridTemplateRows: "auto auto auto" }}
+      >
+        {/* Header row */}
+        <div className="bg-background" />
+        <div className="bg-background px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-muted-foreground text-center">
+          pred · malignant
+        </div>
+        <div className="bg-background px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-muted-foreground text-center">
+          pred · benign
+        </div>
+
+        {/* Row 1 — actual malignant */}
+        <div className="bg-background px-3 py-4 text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center justify-end">
+          actual&nbsp;·&nbsp;<span className="text-foreground/80 normal-case">malignant</span>
+        </div>
+        <CmCell value={tm} max={max} kind="tp" />
+        <CmCell value={fb} max={max} kind="fn" />
+
+        {/* Row 2 — actual benign */}
+        <div className="bg-background px-3 py-4 text-[10px] font-mono uppercase tracking-wider text-muted-foreground flex items-center justify-end">
+          actual&nbsp;·&nbsp;<span className="text-foreground/80 normal-case">benign</span>
+        </div>
+        <CmCell value={fm} max={max} kind="fp" />
+        <CmCell value={tb} max={max} kind="tn" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-5 text-xs font-mono text-muted-foreground">
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#0F6BFF]" />
+          true positives <span className="text-foreground/80 tabular-nums">{tm}</span>
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#EC4899]" />
+          false negatives <span className="text-foreground/80 tabular-nums">{fb}</span>
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#EC4899]/60" />
+          false positives <span className="text-foreground/80 tabular-nums">{fm}</span>
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#0F6BFF]/60" />
+          true negatives <span className="text-foreground/80 tabular-nums">{tb}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function CmCell({
+  value,
+  max,
+  kind,
+}: {
+  value: number;
+  max: number;
+  kind: "tp" | "tn" | "fp" | "fn";
+}) {
+  const intensity = max > 0 ? value / max : 0;
+  // Correct cells = blue scale; incorrect cells = pink scale. Lower intensity
+  // for off-diagonal so the eye lands on the diagonal first.
+  const isCorrect = kind === "tp" || kind === "tn";
+  const base = isCorrect ? "15, 107, 255" : "236, 72, 153"; // #0F6BFF / #EC4899
+  const alpha = isCorrect ? 0.08 + intensity * 0.55 : 0.1 + intensity * 0.7;
+  const textShade = isCorrect ? "text-foreground" : "text-foreground";
+  return (
+    <div
+      className="bg-background relative flex items-center justify-center py-6"
+      style={{ background: `rgba(${base}, ${alpha.toFixed(3)})` }}
+      aria-label={`${kind === "tp" ? "true positive" : kind === "tn" ? "true negative" : kind === "fp" ? "false positive" : "false negative"}: ${value}`}
+    >
+      <span className={`font-display text-3xl tabular-nums ${textShade}`}>{value}</span>
+      <span className="absolute bottom-1.5 right-2 text-[9px] font-mono uppercase tracking-wider text-foreground/40">
+        {kind}
+      </span>
     </div>
   );
 }

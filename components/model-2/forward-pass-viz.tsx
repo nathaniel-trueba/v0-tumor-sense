@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { CheckCircle2, Pause, Play, RotateCcw, XCircle } from "lucide-react";
 import {
   KERNELS,
   applyKernel,
@@ -13,6 +13,10 @@ import {
 } from "@/lib/breast-cancer/image-ops";
 import type { Layer, Network } from "@/lib/breast-cancer/networks";
 import type { PatchImage } from "@/lib/breast-cancer/image-dataset";
+import {
+  lookupRealPrediction,
+  useGalleryPredictions,
+} from "@/lib/breast-cancer/gallery-predictions";
 
 const CANCER = "#EC4899";
 const NO_CANCER = "#0F6BFF";
@@ -286,13 +290,50 @@ export function ForwardPassViz({ network, image }: ForwardPassVizProps) {
 
   const activeMaps = allMaps[activeIndex];
   const activeLayer = network.layers[activeIndex];
-  const prediction = useMemo(() => network.predict(image), [network, image]);
+  const { doc: galleryDoc, status: galleryStatus } = useGalleryPredictions();
+
+  // Prefer the real model's pre-computed prediction; fall back to the mock
+  // predictor when the JSON hasn't loaded yet, or when the active network has
+  // no inference results (e.g. the U-Net).
+  const mockPrediction = useMemo(() => network.predict(image), [network, image]);
+  const realPrediction = useMemo(
+    () => lookupRealPrediction(galleryDoc, network.id, image.id),
+    [galleryDoc, network.id, image.id]
+  );
+
+  const prediction = useMemo(() => {
+    if (!realPrediction) return mockPrediction;
+    const probCancer = realPrediction.probability_cancer;
+    const label = realPrediction.label;
+    const confidence = realPrediction.confidence;
+    // Build a smooth per-layer ramp from 0.5 to the *real* final P(label) — the
+    // model didn't expose intermediate probabilities, so this is illustrative
+    // but it always lands exactly on the real final value.
+    const layerCount = network.layers.length;
+    const targetProb = label === "cancer" ? probCancer : 1 - probCancer;
+    const perLayerConfidence = Array.from({ length: layerCount }, (_, i) => {
+      const t = (i + 1) / layerCount;
+      const eased = 1 - Math.pow(1 - t, 2.2);
+      return 0.5 + (targetProb - 0.5) * eased;
+    });
+    return {
+      label,
+      probability: probCancer,
+      confidence,
+      perLayerConfidence,
+    };
+  }, [realPrediction, mockPrediction, network.layers.length]);
+
   const perLayerProb = useMemo(() => {
     const labelIsCancer = prediction.label === "cancer";
     return prediction.perLayerConfidence.map((c) => (labelIsCancer ? c : 1 - c));
   }, [prediction]);
 
   const finalColor = prediction.label === "cancer" ? CANCER : NO_CANCER;
+  const isReal = !!realPrediction;
+  const truthMatches = isReal
+    ? realPrediction.correct
+    : (image.label === prediction.label);
 
   return (
     <div className="space-y-6">
@@ -440,12 +481,49 @@ export function ForwardPassViz({ network, image }: ForwardPassVizProps) {
           )}
         </div>
         <div className="bg-background p-6 flex flex-col">
-          <div className="text-xs font-mono text-muted-foreground">Final prediction</div>
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-xs font-mono text-muted-foreground">Final prediction</div>
+            <span
+              className={`inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                isReal
+                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                  : galleryStatus === "loading"
+                  ? "bg-foreground/5 text-muted-foreground"
+                  : "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+              }`}
+              title={
+                isReal
+                  ? `Pre-computed from backend/models/${network.id}.pth on this exact patch`
+                  : galleryStatus === "loading"
+                  ? "Loading pre-computed predictions…"
+                  : "No real prediction for this network — showing a simulated value"
+              }
+            >
+              {isReal ? "real · cached" : galleryStatus === "loading" ? "loading…" : "simulated"}
+            </span>
+          </div>
           <div className="mt-2 font-display text-4xl lg:text-5xl tracking-tight" style={{ color: finalColor }}>
             {prediction.label === "cancer" ? "Cancer" : "No cancer"}
           </div>
-          <div className="text-sm text-muted-foreground mt-1">
-            {(prediction.confidence * 100).toFixed(1)}% confidence
+          <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+            <span>{(prediction.confidence * 100).toFixed(1)}% confidence</span>
+            {isReal && (
+              <>
+                <span className="text-foreground/30">·</span>
+                <span
+                  className={`inline-flex items-center gap-1 ${
+                    truthMatches ? "text-emerald-700 dark:text-emerald-400" : "text-amber-700 dark:text-amber-400"
+                  }`}
+                >
+                  {truthMatches ? (
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  ) : (
+                    <XCircle className="w-3.5 h-3.5" />
+                  )}
+                  {truthMatches ? "matches ground truth" : "mismatch · GT " + (image.label === "cancer" ? "cancer" : "no cancer")}
+                </span>
+              </>
+            )}
           </div>
 
           <div className="mt-6 space-y-3">
@@ -485,8 +563,20 @@ export function ForwardPassViz({ network, image }: ForwardPassVizProps) {
             </div>
           </div>
 
-          <div className="mt-auto pt-6 text-xs font-mono text-muted-foreground border-t border-foreground/10">
-            Per-layer confidence bars above each layer card show how the model&apos;s certainty rises as the input traverses the network.
+          <div className="mt-auto pt-6 border-t border-foreground/10 space-y-2">
+            {isReal && (
+              <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground">
+                <span>backend latency</span>
+                <span className="text-foreground/80 tabular-nums">
+                  {realPrediction.latency_ms.toFixed(1)} ms
+                </span>
+              </div>
+            )}
+            <div className="text-xs font-mono text-muted-foreground leading-relaxed">
+              {isReal
+                ? "Final label and confidence are the trained model's actual output for this patch (pre-computed once and cached as a static asset). Per-layer bars ramp from 0.5 to the real final probability."
+                : "Per-layer confidence bars above each layer card show how the model's certainty rises as the input traverses the network."}
+            </div>
           </div>
         </div>
       </div>

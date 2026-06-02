@@ -15,6 +15,7 @@ import { EmbeddingExplorer } from "./embedding-explorer";
 import { EigenBreasts } from "./eigen-breasts";
 import { SegmentationView } from "./segmentation-view";
 import { NetworkStats } from "./network-stats";
+import { ProbabilityLandscape } from "./probability-landscape";
 
 type Mode = "classification" | "segmentation";
 
@@ -194,6 +195,9 @@ export function Model2Workshop() {
           </div>
           <div className="border-t border-foreground/10 pt-10">
             <EigenBreasts image={image} />
+          </div>
+          <div className="border-t border-foreground/10 pt-10">
+            <ProbabilityLandscape />
           </div>
         </section>
       )}

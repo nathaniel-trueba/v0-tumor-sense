@@ -1,27 +1,76 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# ── Dependencies ─────────────────────────────────────────────────────────────
 /node_modules
 
-# next.js
+# ── Next.js ──────────────────────────────────────────────────────────────────
 /.next/
 /out/
-
-# production
 /build
 
-# debug
+# ── TypeScript / tooling ─────────────────────────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Logs & debug ─────────────────────────────────────────────────────────────
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*
+# ── Environment (secrets) — keep *.example tracked ───────────────────────────
+.env
+.env.local
+.env.*.local
+backend/.env
+!.env.example
+!backend/.env.example
 
-# vercel
+# ── Vercel ───────────────────────────────────────────────────────────────────
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ── Python / FastAPI backend ─────────────────────────────────────────────────
+backend/.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg
+
+# Model weights & scalers (~190 MB) — published separately (e.g. Hugging Face)
+backend/models/*.pth
+backend/models/*.joblib
+
+# Training / eval outputs (large CSVs, patch folders, running logs)
+backend/outputs/image_out/
+backend/outputs/**/*.csv
+backend/outputs/**/patient_*/
+
+# HF / ML caches (downloaded at runtime on deploy)
+.cache/
+.huggingface/
+
+# ── Jupyter ────────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Local duplicates & misc assets not needed in the repo ────────────────────
+# Source patches copied to public/histopathology/ for the site
+/images/
+
+# ── OS & editors ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.webm

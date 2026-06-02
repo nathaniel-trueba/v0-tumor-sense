@@ -1,0 +1,184 @@
+{
+  "rbf": {
+    "best_params": {
+      "C": 10,
+      "gamma": 0.01
+    },
+    "cv_auc": 0.9962,
+    "test_auc": 0.9977,
+    "confusion_matrix": [
+      [
+        41,
+        1
+      ],
+      [
+        1,
+        71
+      ]
+    ],
+    "classification_report": {
+      "malignant": {
+        "precision": 0.9761904761904762,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9761904761904762,
+        "support": 42.0
+      },
+      "benign": {
+        "precision": 0.9861111111111112,
+        "recall": 0.9861111111111112,
+        "f1-score": 0.9861111111111112,
+        "support": 72.0
+      },
+      "accuracy": 0.9824561403508771,
+      "macro avg": {
+        "precision": 0.9811507936507937,
+        "recall": 0.9811507936507937,
+        "f1-score": 0.9811507936507937,
+        "support": 114.0
+      },
+      "weighted avg": {
+        "precision": 0.9824561403508771,
+        "recall": 0.9824561403508771,
+        "f1-score": 0.9824561403508771,
+        "support": 114.0
+      }
+    }
+  },
+  "linear": {
+    "best_params": {
+      "C": 0.1
+    },
+    "cv_auc": 0.9955,
+    "test_auc": 0.9937,
+    "confusion_matrix": [
+      [
+        41,
+        1
+      ],
+      [
+        1,
+        71
+      ]
+    ],
+    "classification_report": {
+      "malignant": {
+        "precision": 0.9761904761904762,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9761904761904762,
+        "support": 42.0
+      },
+      "benign": {
+        "precision": 0.9861111111111112,
+        "recall": 0.9861111111111112,
+        "f1-score": 0.9861111111111112,
+        "support": 72.0
+      },
+      "accuracy": 0.9824561403508771,
+      "macro avg": {
+        "precision": 0.9811507936507937,
+        "recall": 0.9811507936507937,
+        "f1-score": 0.9811507936507937,
+        "support": 114.0
+      },
+      "weighted avg": {
+        "precision": 0.9824561403508771,
+        "recall": 0.9824561403508771,
+        "f1-score": 0.9824561403508771,
+        "support": 114.0
+      }
+    }
+  },
+  "poly": {
+    "best_params": {
+      "C": 1,
+      "coef0": 1.0,
+      "degree": 2,
+      "gamma": "scale"
+    },
+    "cv_auc": 0.9963,
+    "test_auc": 0.998,
+    "confusion_matrix": [
+      [
+        41,
+        1
+      ],
+      [
+        1,
+        71
+      ]
+    ],
+    "classification_report": {
+      "malignant": {
+        "precision": 0.9761904761904762,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9761904761904762,
+        "support": 42.0
+      },
+      "benign": {
+        "precision": 0.9861111111111112,
+        "recall": 0.9861111111111112,
+        "f1-score": 0.9861111111111112,
+        "support": 72.0
+      },
+      "accuracy": 0.9824561403508771,
+      "macro avg": {
+        "precision": 0.9811507936507937,
+        "recall": 0.9811507936507937,
+        "f1-score": 0.9811507936507937,
+        "support": 114.0
+      },
+      "weighted avg": {
+        "precision": 0.9824561403508771,
+        "recall": 0.9824561403508771,
+        "f1-score": 0.9824561403508771,
+        "support": 114.0
+      }
+    }
+  },
+  "sigmoid": {
+    "best_params": {
+      "C": 10,
+      "coef0": 0.0,
+      "gamma": 0.001
+    },
+    "cv_auc": 0.9943,
+    "test_auc": 0.996,
+    "confusion_matrix": [
+      [
+        39,
+        3
+      ],
+      [
+        1,
+        71
+      ]
+    ],
+    "classification_report": {
+      "malignant": {
+        "precision": 0.975,
+        "recall": 0.9285714285714286,
+        "f1-score": 0.9512195121951219,
+        "support": 42.0
+      },
+      "benign": {
+        "precision": 0.9594594594594594,
+        "recall": 0.9861111111111112,
+        "f1-score": 0.9726027397260274,
+        "support": 72.0
+      },
+      "accuracy": 0.9649122807017544,
+      "macro avg": {
+        "precision": 0.9672297297297296,
+        "recall": 0.9573412698412699,
+        "f1-score": 0.9619111259605746,
+        "support": 114.0
+      },
+      "weighted avg": {
+        "precision": 0.9651849217638692,
+        "recall": 0.9649122807017544,
+        "f1-score": 0.9647247085304307,
+        "support": 114.0
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+.env
+.env.*
+*.log
+.coverage
+.pytest_cache
+# Keep .pth/.joblib OUT of the image — they're fetched at startup or baked
+# in via a publishing step (see DEPLOY.md). Comment out if you bake them in.
+models/*.pth
+models/*.joblib
+outputs/

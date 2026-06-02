@@ -1,0 +1,15 @@
+{
+  "$comment": "Map filename → optional explicit URL. If a URL is missing the downloader joins the filename onto $TUMORSENSE_WEIGHTS_BASE_URL. Add HuggingFace / S3 / GitHub-Release URLs here as you publish them.",
+  "files": {
+    "scaler.joblib":               {"size_kb": 4,       "url": null},
+    "model_linear.joblib":         {"size_kb": 20,      "url": null},
+    "model_rbf.joblib":            {"size_kb": 20,      "url": null},
+    "model_poly.joblib":           {"size_kb": 20,      "url": null},
+    "model_sigmoid.joblib":        {"size_kb": 32,      "url": null},
+    "BaselineCNN_weights.pth":     {"size_kb": 1228,    "url": null},
+    "MobileNetV2_weights.pth":     {"size_kb": 8908,    "url": null},
+    "resnet18_weights.pth":        {"size_kb": 46080,   "url": null},
+    "VGG16_weights.pth":           {"size_kb": 114688,  "url": null},
+    "ViTTiny_weights.pth":         {"size_kb": 21504,   "url": null}
+  }
+}

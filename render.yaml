@@ -1,0 +1,57 @@
+# Render.com blueprint — `render.yaml`
+#
+# Reads from the repo root. Render auto-detects this file when you click
+# "New +" → "Blueprint" and point at the repo. One service is defined:
+#
+#   tumorsense-api   FastAPI server backing /model, /model-2 and /api-docs.
+#
+# Notes:
+#   * Model weight files in backend/models/ are NOT committed to git. The
+#     startup command first runs `download_weights.py`, which fetches every
+#     missing weight from the URL list in backend/scripts/weights_manifest.json
+#     (override per-file or in bulk via TUMORSENSE_WEIGHTS_BASE_URL).
+#   * The free plan has 512 MB RAM and auto-spins down after 15 min idle.
+#     For reliable image-model inference, use the `starter` plan (2 GB RAM).
+#   * To enable the OpenAI-backed RAG, add `OPENAI_API_KEY` as a secret
+#     environment variable from the Render dashboard.
+
+services:
+  - type: web
+    name: tumorsense-api
+    runtime: python
+    region: oregon
+    plan: starter      # change to `free` for the spin-down tier
+    branch: main
+    rootDir: .
+    buildCommand: |
+      pip install --upgrade pip &&
+      pip install -r backend/requirements.txt
+    startCommand: |
+      python backend/scripts/download_weights.py &&
+      uvicorn backend.server:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      # Lock CORS down to your deployed frontend(s); comma-separated.
+      - key: TUMORSENSE_CORS_ORIGINS
+        value: "*"
+      # Where weight files live in the container filesystem.
+      - key: TUMORSENSE_MODELS_DIR
+        value: /opt/render/project/src/backend/models
+      # Public base URL for the weights manifest. Override to point at S3,
+      # HuggingFace, GitHub Releases, etc. See backend/DEPLOY.md.
+      - key: TUMORSENSE_WEIGHTS_BASE_URL
+        value: ""
+      # Set from the Render dashboard (secret). Leave unset to fall back to
+      # the deterministic template RAG generator.
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      # Avoid noisy progress bars in build logs.
+      - key: TRANSFORMERS_VERBOSITY
+        value: error
+      - key: HF_HUB_DISABLE_TELEMETRY
+        value: "1"
